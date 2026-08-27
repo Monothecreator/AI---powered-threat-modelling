@@ -39,6 +39,12 @@ def test_api_returns_report():
     assert response.json()["application"] == "tiny"
 
 
+def test_api_accepts_raw_yaml_documents():
+  response = TestClient(app).post("/v1/analyze", json={"architecture": ARCHITECTURE})
+  assert response.status_code == 200
+  assert response.json()["application"] == "ecommerce-api"
+
+
 def test_public_sensitive_storage_is_critical():
     report = analyze(parse_architecture({"name": "files", "components": [{"name": "api", "type": "api"}, {"name": "bucket", "type": "storage", "public": True, "sensitive_data": True}], "connections": ["api -> bucket"]}))
     assert any(threat.title == "Public Storage Exposure" and threat.severity == "CRITICAL" for threat in report.threats)

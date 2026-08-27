@@ -12,7 +12,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
 class AnalysisRequest(BaseModel):
-    architecture: Architecture | dict = Field(..., description="Architecture document")
+    architecture: Architecture | dict | str = Field(..., description="Architecture document")
 
 
 @app.get("/")

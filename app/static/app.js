@@ -34,8 +34,7 @@ async function runAnalysis() {
   button.innerHTML = '<span class="button-icon">…</span> Analysing architecture';
   errorBox.hidden = true;
   try {
-    const architecture = parseInput(input.value);
-    const response = await fetch('/v1/analyze', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({architecture}) });
+    const response = await fetch('/v1/analyze', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({architecture: input.value}) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.detail || 'The architecture could not be analysed.');
     renderReport(payload);
