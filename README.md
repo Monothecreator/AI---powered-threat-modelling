@@ -2,6 +2,8 @@
 
 A deterministic, explainable security analysis engine for application architectures. It models components and trust boundaries, detects STRIDE-aligned threats, scores risk, builds attack-path evidence, and returns remediation plus validation guidance before deployment.
 
+To Access the port :https://congenial-system-q74xqp5rj5pj2p6w-8000.app.github.dev/
+
 ## Current slice
 
 - JSON, YAML, and Python model input
