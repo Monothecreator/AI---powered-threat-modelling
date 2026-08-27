@@ -7,9 +7,18 @@ components:
   - name: api
     type: backend
     internet_facing: true
+    authentication: oauth2
+    authorization: tenant-and-resource-policy
+    audit_logging: true
   - name: database
     type: postgres
     sensitive_data: true
 connections:
   - frontend -> api
-  - api -> database
+  - source: api
+    target: database
+    protocol: tls
+    data_types:
+      - customer data
+      - payment data
+    encrypted: true

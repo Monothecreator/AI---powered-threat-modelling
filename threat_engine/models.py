@@ -9,6 +9,9 @@ class Component(BaseModel):
     public: bool = False
     sensitive_data: bool = False
     authentication: str | None = None
+    authorization: str | None = None
+    audit_logging: bool = False
+    credential_rotation: bool = False
     permissions: list[str] = Field(default_factory=list)
 
 
@@ -16,6 +19,9 @@ class Connection(BaseModel):
     source: str
     target: str
     protocol: str | None = None
+    data_types: list[str] = Field(default_factory=list)
+    encrypted: bool = False
+    trust_boundary: bool = True
 
     @model_validator(mode="before")
     @classmethod
@@ -34,7 +40,17 @@ class Architecture(BaseModel):
 
     @model_validator(mode="after")
     def validate_references(self) -> "Architecture":
-        names = {component.name for component in self.components}
+        component_names = [component.name for component in self.components]
+        duplicates = sorted({name for name in component_names if component_names.count(name) > 1})
+        if duplicates:
+            raise ValueError(f"Component names must be unique: {', '.join(duplicates)}")
+        names = set(component_names)
+        connection_keys = [(link.source, link.target) for link in self.connections]
+        if len(connection_keys) != len(set(connection_keys)):
+            raise ValueError("Connections must be unique")
+        self_references = sorted({link.source for link in self.connections if link.source == link.target})
+        if self_references:
+            raise ValueError(f"Connections cannot reference the same component: {', '.join(self_references)}")
         missing = {endpoint for link in self.connections for endpoint in (link.source, link.target) if endpoint not in names and endpoint.lower() != "internet"}
         if missing:
             raise ValueError(f"Connections reference unknown components: {', '.join(sorted(missing))}")

@@ -8,7 +8,9 @@ To Access the port :https://congenial-system-q74xqp5rj5pj2p6w-8000.app.github.de
 
 - JSON, YAML, and Python model input
 - Pydantic architecture validation, including `source -> target` connections
+- Explicit data-flow metadata for protocols, data types, encryption, and trust boundaries
 - Deterministic rules for SQL injection, authentication bypass, API abuse, data exposure, public storage, excessive permissions, and prompt injection trust boundaries
+- Multi-hop attack-path analysis from internet-facing components to sensitive or public assets
 - STRIDE categories, CWE mappings, explainable findings, and severity scoring
 - FastAPI endpoint for report generation
 - Pytest evaluation fixture based on an intentionally vulnerable ecommerce architecture
@@ -34,6 +36,16 @@ curl -s http://127.0.0.1:8000/v1/analyze \
 ```
 
 The sample architecture is at [examples/ecommerce.yaml](examples/ecommerce.yaml). API documentation is available at `/docs` when the server is running.
+
+Connections may use the compact `source -> target` form or structured metadata:
+
+```yaml
+- source: api
+	target: database
+	protocol: tls
+	data_types: [customer data]
+	encrypted: true
+```
 
 ## Roadmap
 
