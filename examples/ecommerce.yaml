@@ -1,0 +1,15 @@
+name: ecommerce-api
+description: Example intentionally vulnerable architecture for local evaluation.
+components:
+  - name: frontend
+    type: web
+    internet_facing: true
+  - name: api
+    type: backend
+    internet_facing: true
+  - name: database
+    type: postgres
+    sensitive_data: true
+connections:
+  - frontend -> api
+  - api -> database
